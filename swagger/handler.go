@@ -1,8 +1,7 @@
 package swagger
 
 import (
-	"net/http"
-
+	swaggerUi "github.com/go-swagno/swagno-files"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 )
@@ -28,6 +27,6 @@ func SwaggerHandler(a *fiber.App, doc []byte, config ...Config) {
 		return c.SendString(swaggerDoc)
 	})
 	a.Use(defaultConfig.Prefix, filesystem.New(filesystem.Config{
-		Root: http.Dir("./swaggerFiles"),
+		Root: swaggerUi.HTTP,
 	}))
 }
