@@ -28,6 +28,6 @@ func SwaggerHandler(a *fiber.App, doc []byte, config ...Config) {
 		return c.SendString(swaggerDoc)
 	})
 	a.Use(defaultConfig.Prefix, filesystem.New(filesystem.Config{
-		Root: http.Dir("../swaggerFiles"),
+		Root: http.Dir("./swaggerFiles"),
 	}))
 }
