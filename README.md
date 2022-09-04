@@ -13,9 +13,9 @@ go get github.com/go-swagno/swagno-fiber
 ```go
 import "github.com/go-swagno/swagno-fiber/swagger"
 ```
-5. Be sure you created swagger instance and endpoints
+5. **Be sure you created swagger instance and endpoints**
 6. Create swagger handler
 ```go
-swagger.SwaggerHandler(a, sw.GenerateDocs(endpoints), swagger.Config{Prefix: "/swagger"})
+swagger.SwaggerHandler(a, sw.GenerateDocs(), swagger.Config{Prefix: "/swagger"})
 ```
 7. Visit /swagger and /swagger/doc.json for confirmation
