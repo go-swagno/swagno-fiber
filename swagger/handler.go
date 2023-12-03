@@ -10,22 +10,41 @@ type Config struct {
 	Prefix string
 }
 
-var swaggerDoc string
-
 var defaultConfig = Config{
 	Prefix: "/swagger",
 }
 
-func SwaggerHandler(a *fiber.App, doc []byte, config ...Config) {
-	if len(config) != 0 {
-		defaultConfig = config[0]
+type option func(*Config)
+
+func WithPrefix(prefix string) option {
+	return func(c *Config) {
+		c.Prefix = prefix
 	}
-	if swaggerDoc == "" {
-		swaggerDoc = string(doc)
+}
+
+func SwaggerHandler(a *fiber.App, doc []byte, opts ...option) {
+	config := Config{}
+
+	for _, opt := range opts {
+		opt(&config)
 	}
+
+	if config.Prefix == "" {
+		config.Prefix = defaultConfig.Prefix
+	}
+
 	a.Use(defaultConfig.Prefix+"/doc.json", func(c *fiber.Ctx) error {
-		return c.SendString(swaggerDoc)
+		c.Set("Content-type", "application/json; charset=utf-8")
+		return c.SendString(string(doc))
 	})
+
+	a.Use(func(c *fiber.Ctx) error {
+		if c.Path() == config.Prefix {
+			return c.Redirect(config.Prefix+"/", 301)
+		}
+		return c.Next()
+	})
+
 	a.Use(defaultConfig.Prefix, filesystem.New(filesystem.Config{
 		Root: swaggerUi.HTTP,
 	}))
