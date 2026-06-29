@@ -14,15 +14,15 @@ var defaultConfig = Config{
 	Prefix: "/swagger",
 }
 
-type option func(*Config)
+type Option func(*Config)
 
-func WithPrefix(prefix string) option {
+func WithPrefix(prefix string) Option {
 	return func(c *Config) {
 		c.Prefix = prefix
 	}
 }
 
-func SwaggerHandler(a *fiber.App, doc []byte, opts ...option) {
+func SwaggerHandler(a *fiber.App, doc []byte, opts ...Option) {
 	config := Config{}
 
 	for _, opt := range opts {
